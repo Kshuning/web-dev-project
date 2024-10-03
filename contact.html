@@ -1,0 +1,59 @@
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - John Doe</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contact Form Content -->
+    <section>
+        <h1>Contact John Doe</h1>
+        <form id="contactForm" action="mailto:john.doe@example.com" method="POST" onsubmit="return validateForm()">
+            <!-- Name field -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Your Name">
+            
+            <!-- Email field -->
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Your Email">
+
+            <!-- Message field -->
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" placeholder="Your Message (Please be polite)"></textarea>
+
+            <!-- Submit button -->
+            <input type="submit" value="Send Message">
+        </form>
+    </section>
+
+    <!-- JavaScript validation -->
+    <script>
+        // Function to check if all fields are filled out
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var message = document.getElementById("message").value;
+
+            // If any of the fields are empty, show an alert and prevent form submission
+            if (name == "" || email == "" || message == "") {
+                alert("Please fill in all the fields.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+</body>
+</html>
