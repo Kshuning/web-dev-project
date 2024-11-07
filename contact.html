@@ -1,9 +1,9 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - Shuning</title>
+    <title>Contact - John Doe</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,39 +19,67 @@
 
     <!-- Contact Form Content -->
     <section>
-        <h1>Contact Shuning</h1>
-        <form id="contactForm" action="mailto:Shuning@example.com" method="POST" onsubmit="return validateForm()">
-            <!-- Name field -->
+        <h1>Contact John Doe</h1>
+        <form id="contactForm" method="POST" action="mailto:shuning@example.com" onsubmit="return validateForm()">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" placeholder="Your Name">
             
-            <!-- Email field -->
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" placeholder="Your Email">
 
-            <!-- Message field -->
             <label for="message">Message:</label>
-            <textarea id="message" name="message" placeholder="Your Message (Please be polite)"></textarea>
+            <textarea id="message" name="message" placeholder="Your Message (be polite)"></textarea>
 
-            <!-- Submit button -->
             <input type="submit" value="Send Message">
         </form>
     </section>
 
-    <!-- JavaScript validation -->
     <script>
-        // Function to check if all fields are filled out
-        function validateForm() {
-            var name = document.getElementById("name").value;
-            var email = document.getElementById("email").value;
-            var message = document.getElementById("message").value;
+        // Function to fetch the current date and append it to the message
+        async function validateForm() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
 
-            // If any of the fields are empty, show an alert and prevent form submission
-            if (name == "" || email == "" || message == "") {
+            // If any field is empty, prompt user to fill it in
+            if (!name || !email || !message) {
                 alert("Please fill in all the fields.");
                 return false;
             }
-            return true;
+
+            try {
+                // Fetch the current date from the Node.js server (date.js)
+                const dateResponse = await fetch('http://localhost:3001/get-date');
+                const dateResult = await dateResponse.json();
+
+                // Check if we successfully fetched the date
+                if (!dateResult.date) {
+                    throw new Error("Failed to fetch the date.");
+                }
+
+                const currentDate = dateResult.date;
+
+                // Append the current date to the message
+                const updatedMessage = `${message}\n\nSent on: ${currentDate}`;
+
+                // Update the message value in the form
+                document.getElementById("message").value = updatedMessage;
+
+                // Modify the form's action (mailto) to include the updated message in the body
+                const mailtoLink = `mailto:example@example.com?subject=Contact from ${name}&body=${encodeURIComponent(updatedMessage)}`;
+
+                // Set the form's action attribute to the updated mailto link
+                document.getElementById("contactForm").action = mailtoLink;
+
+                // Return true to submit the form after updating the message
+                return true;
+
+            } catch (error) {
+                // If there's an error with the fetch or appending the date, show an alert
+                alert("There was an issue fetching the date. Please try again later.");
+                console.error("Error:", error);
+                return false;
+            }
         }
     </script>
 
